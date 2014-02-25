@@ -119,7 +119,11 @@ function GnomTEC_Babel:Translate(msg, chatType, language, channel)
 			language = GnomTEC_Babel_Options["Language"]
 		end
 		if (GnomTEC_Babel_Options["Enable"]) then
-			self.hooks.SendChatMessage("["..language.."] "..msg,chatType,nil, channel)
+			if ((not language) or (language == GetLanguageByIndex(1))) then
+				self.hooks.SendChatMessage(msg,chatType,language, channel)
+			else
+				self.hooks.SendChatMessage("["..language.."] "..msg,chatType,nil, channel)
+			end
 		else
 			self.hooks.SendChatMessage(msg,chatType,language, channel)
 		end

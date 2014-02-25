@@ -1,6 +1,10 @@
 ﻿GnomTEC Babel Addon - Change History 
 ==========================
 
+V0.3 (2011-12-xx)
+============
+- Fehler behoben der auftrat wenn language = nil
+
 V0.2 (2011-12-23)
 ============
 - Anzeige der aktuellen Sprache funktioniert jetzt auch beim Start.

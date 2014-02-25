@@ -28,6 +28,7 @@
 					</OnLoad>
 					<OnShow>
 						if (nil == GnomTEC_Babel_Options["Language"]) then
+							GnomTEC_Babel_Options["Language"] = GetLanguageByIndex(1);
 							self:SetText(GetLanguageByIndex(1));
 						else
 							self:SetText(GnomTEC_Babel_Options["Language"]);
