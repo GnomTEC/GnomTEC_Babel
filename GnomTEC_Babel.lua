@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Babel
--- Version: 5.4.2.12
+-- Version: 5.4.7.13
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -22,6 +22,31 @@ GnomTEC_Babel_Options = {
 -- ----------------------------------------------------------------------
 -- Addon global Constants (local)
 -- ----------------------------------------------------------------------
+
+-- internal used version number since WoW only updates from TOC on game start
+local addonVersion = "5.4.7.13"
+
+-- addonInfo for addon registration to GnomTEC API
+local addonInfo = {
+	["Name"] = "GnomTEC Babel",
+	["Version"] = addonVersion,
+	["Date"] = "2014-02-25",
+	["Author"] = "GnomTEC",
+	["Email"] = "info@gnomtec.de",
+	["Website"] = "http://www.gnomtec.de/",
+	["Copyright"] = "(c)2011-2014 by GnomTEC",
+}
+
+-- GnomTEC API revision
+local GNOMTEC_REVISION = 0
+
+-- Log levels
+local LOG_FATAL 	= 0
+local LOG_ERROR	= 1
+local LOG_WARN		= 2
+local LOG_INFO 	= 3
+local LOG_DEBUG 	= 4
+
 -- Horde
 local LANGUAGE_ORCISH					= 1
 local LANGUAGE_TAURAHE 					= 3
@@ -78,32 +103,32 @@ local optionsMain = {
 			name = "About",
 			type = "group",
 			guiInline = true,
-			order = 4,
+			order = 2,
 			args = {
 				descriptionVersion = {
 				order = 1,
 				type = "description",			
-				name = "|cffffd700".."Version"..": ".._G["GREEN_FONT_COLOR_CODE"]..GetAddOnMetadata("GnomTEC_Babel", "Version"),
+				name = "|cffffd700".."Version"..": ".._G["GREEN_FONT_COLOR_CODE"]..addonInfo["Version"],
 				},
 				descriptionAuthor = {
 					order = 2,
 					type = "description",
-					name = "|cffffd700".."Autor"..": ".."|cffff8c00".."GnomTEC",
+					name = "|cffffd700".."Author"..": ".."|cffff8c00"..addonInfo["Author"],
 				},
 				descriptionEmail = {
 					order = 3,
 					type = "description",
-					name = "|cffffd700".."Email"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"].."info@gnomtec.de",
+					name = "|cffffd700".."Email"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"]..addonInfo["Email"],
 				},
 				descriptionWebsite = {
 					order = 4,
 					type = "description",
-					name = "|cffffd700".."Website"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"].."http://www.gnomtec.de/",
+					name = "|cffffd700".."Website"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"]..addonInfo["Website"],
 				},
 				descriptionLicense = {
 					order = 5,
 					type = "description",
-					name = "|cffffd700".."Copyright"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"].."(c)2011-2013 by GnomTEC",
+					name = "|cffffd700".."Copyright"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"]..addonInfo["Copyright"],
 				},
 			}
 		},
@@ -190,6 +215,26 @@ LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Babel Main", optionsMain)
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Babel Languages", optionsLanguages)
 LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Babel Main", "GnomTEC Babel");
 LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Babel Languages", L["L_OPTIONS_LANGUAGES"], "GnomTEC Babel");
+
+-- ----------------------------------------------------------------------
+-- Local stubs for the GnomTEC API
+-- ----------------------------------------------------------------------
+
+local function GnomTEC_LogMessage(level, message)
+	if (GnomTEC) then
+		GnomTEC:LogMessage(GnomTEC_Babel, level, message)
+	else
+		if (level < LOG_DEBUG) then
+			GnomTEC_Babel:Print(message)
+		end
+	end
+end
+
+local function GnomTEC_RegisterAddon()
+	if (GnomTEC) then
+		GnomTEC:RegisterAddon(GnomTEC_Babel, addonInfo, GNOMTEC_REVISION)
+	end 
+end
 
 -- ----------------------------------------------------------------------
 -- Local functions
@@ -353,14 +398,15 @@ end
 function GnomTEC_Babel:OnInitialize()
  	-- Code that you want to run when the addon is first loaded goes here.
   
-  	GnomTEC_Babel:Print(L["L_WELCOME"])
+  	GnomTEC_RegisterAddon()
+  	GnomTEC_LogMessage(LOG_INFO, L["L_WELCOME"])
   	  	
 end
 
 function GnomTEC_Babel:OnEnable()
     -- Called when the addon is enabled
 
-	GnomTEC_Babel:Print("GnomTEC_Babel Enabled")
+	GnomTEC_LogMessage(LOG_INFO, "GnomTEC_Babel Enabled")
 	self:RawHook("SendChatMessage","Translate",true)
 
 	-- Initialize options which are propably not valid because they are new added in new versions of addon
