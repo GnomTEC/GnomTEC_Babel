@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Babel
--- Version: 0.4
+-- Version: 0.5
 -- Author: Lugus Sprengfix
 -- Copyright 2011-2012 by GnomTEC
 -- http://www.gnomtec.de/

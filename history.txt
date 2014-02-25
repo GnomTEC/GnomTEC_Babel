@@ -1,6 +1,11 @@
 ﻿GnomTEC Babel Addon - Change History 
 ==========================
 
+V0.5 (2012-08-29)
+============
+- Updated interface version for WoW MoP
+- Updated Ace3 libraries to fix configuration issues
+
 V0.4 (2012-02-03)
 ============
 - Refactoring to new source code layout
