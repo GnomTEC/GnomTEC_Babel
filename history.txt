@@ -1,5 +1,9 @@
-﻿GnomTEC Babel Addon - Change History 
+GnomTEC Babel Addon - Change History 
 ==========================
+
+5.3.0.9 (2013-06-29)
+============
+- workaround added for issue with GetNumLanguages() in dropdown initialization direct after login
 
 5.3.0.8 (2013-06-28)
 ============

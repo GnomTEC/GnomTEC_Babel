@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Babel
--- Version: 5.3.0.8
+-- Version: 5.3.0.9
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -239,13 +239,15 @@ local function GnomTEC_Babel_SelectLanguage_InitializeDropDown(level)
 		notCheckable = 1,
 		func = function (self, arg1, arg2, checked) GnomTEC_Babel:SetLanguage(arg2) end
 	}
+	-- to fix issue at login with sometimes returned nil
+	local numLanguages = GetNumLanguages() or 1
 
 	repeat
 		language.arg1, language.arg2 = GetLanguageByIndex(i)	
 		language.text = language.arg1
 		UIDropDownMenu_AddButton(language)
 		i = i + 1
-	until (i > GetNumLanguages())
+	until (i > numLanguages)
 	
 	i = 1
 	if (GnomTEC_Babel_Options["Enabled"]) then
