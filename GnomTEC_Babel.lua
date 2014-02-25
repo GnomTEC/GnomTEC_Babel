@@ -1,6 +1,8 @@
 ﻿GnomTEC_Babel_Options = {
 	["Enabled"] = true,
-	["Language"] = GetDefaultLanguage(),	
+	["Language"] = GetDefaultLanguage(),
+	["LanguageSelectorEnabled"] = true,
+	
 }
 
 local optionsMain = {
@@ -16,16 +18,25 @@ local optionsMain = {
 			type = "toggle",
 			name = "Aktiviere Antidiskriminierung",
 			desc = "",
-			set = function(info,val) GnomTEC_Babel_Options["Enable"] = val; if (GnomTEC_Babel_Options["Enable"]) then GNOMTEC_BABEL_FRAME:Show(); else GNOMTEC_BABEL_FRAME:Hide(); end;  end,
+			set = function(info,val) GnomTEC_Babel_Options["Enable"] = val;  end,
 			get = function(info) return GnomTEC_Babel_Options["Enable"] end,
 			width = 'full',
 			order = 2
+		},
+		babelOptionLanguageSelectorEnable = {
+			type = "toggle",
+			name = "Aktiviere Button zur Sprachumschaltung",
+			desc = "",
+			set = function(info,val) GnomTEC_Babel_Options["LanguageSelectorEnabled"] = val; if (GnomTEC_Babel_Options["LanguageSelectorEnabled"]) then GNOMTEC_BABEL_FRAME:Show(); else GNOMTEC_BABEL_FRAME:Hide(); end;  end,
+			get = function(info) return GnomTEC_Babel_Options["LanguageSelectorEnabled"] end,
+			width = 'full',
+			order = 3
 		},
 		descriptionAbout = {
 			name = "About",
 			type = "group",
 			guiInline = true,
-			order = 3,
+			order = 4,
 			args = {
 				descriptionVersion = {
 				order = 1,
@@ -55,7 +66,7 @@ local optionsMain = {
 			}
 		},
 		descriptionLogo = {
-			order = 4,
+			order = 5,
 			type = "description",
 			name = "",
 			image = "Interface\\AddOns\\GnomTEC_Babel\\Textures\\GnomTEC-Logo",
@@ -83,7 +94,13 @@ function GnomTEC_Babel:OnEnable()
 	GnomTEC_Babel:Print("GnomTEC_Babel Enabled")
 	self:RawHook("SendChatMessage","Translate",true)
 
-	if (GnomTEC_Babel_Options["Enable"]) then
+	-- Initialize options which are propably not valid because they are new added in new versions of addon
+	if (nil == GnomTEC_Babel_Options["LanguageSelectorEnabled"]) then
+		GnomTEC_Babel_Options["LanguageSelectorEnabled"] = GnomTEC_Babel_Options["Enabled"]
+	end
+	
+	-- Show GUI
+	if (GnomTEC_Babel_Options["LanguageSelectorEnabled"]) then
 		GNOMTEC_BABEL_FRAME:Show()
 	end
 end
@@ -96,14 +113,15 @@ function GnomTEC_Babel:OnDisable()
 
 end
 
-function GnomTEC_Babel:Translate(msg, chatType, language, channel)
-	
-	if ((GnomTEC_Babel_Options["Enable"]) and (chatType == "SAY")) then
-		language = GnomTEC_Babel_Options["Language"]
-		if ((language ~= "Gemeinsprache") and (language ~= "Orcisch") and (language ~= nil)) then
-			self.hooks.SendChatMessage("["..language.."] "..msg,chatType,nil, channel)	
+function GnomTEC_Babel:Translate(msg, chatType, language, channel)	
+	if ((chatType == "SAY") or (chatType == "YELL")) then
+		if (GnomTEC_Babel_Options["LanguageSelectorEnabled"]) then
+			language = GnomTEC_Babel_Options["Language"]
+		end
+		if (GnomTEC_Babel_Options["Enable"]) then
+			self.hooks.SendChatMessage("["..language.."] "..msg,chatType,nil, channel)
 		else
-			self.hooks.SendChatMessage(msg,chatType,nil, channel)
+			self.hooks.SendChatMessage(msg,chatType,language, channel)
 		end
 	else
 		self.hooks.SendChatMessage(msg,chatType,language, channel)
@@ -111,8 +129,7 @@ function GnomTEC_Babel:Translate(msg, chatType, language, channel)
 end
 
 function GnomTEC_Babel:ChangeLanguage()
-	if (GetNumLanguages() > 1) then
-		
+	if (GetNumLanguages() > 1) then	
 		 if (GetLanguageByIndex(1) == GnomTEC_Babel_Options["Language"]) then
 		 	GnomTEC_Babel_Options["Language"] = GetLanguageByIndex(2)
 		 else

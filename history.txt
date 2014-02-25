@@ -1,6 +1,12 @@
 ﻿GnomTEC Babel Addon - Change History 
 ==========================
 
+V0.2 (2011-12-23)
+============
+- Anzeige der aktuellen Sprache funktioniert jetzt auch beim Start.
+- Funktionalität jetzt auch im /y
+- Sprachauswahlbutton auch separat von der Antidiskriminierungsfunktion nutzbar
+
 V0.1 (2011-12-10)
 ============
 - Initiale Version

@@ -20,8 +20,19 @@
 				</Anchors>
 				<Scripts>
 					<OnLoad>
-						self:SetText(GnomTEC_Babel_Options["Language"]);
+						if (nil == GnomTEC_Babel_Options["Language"]) then
+							self:SetText(GetLanguageByIndex(1));
+						else
+							self:SetText(GnomTEC_Babel_Options["Language"]);
+						end
 					</OnLoad>
+					<OnShow>
+						if (nil == GnomTEC_Babel_Options["Language"]) then
+							self:SetText(GetLanguageByIndex(1));
+						else
+							self:SetText(GnomTEC_Babel_Options["Language"]);
+						end
+					</OnShow>
 					<OnClick>
 						GnomTEC_Babel:ChangeLanguage();		
 					</OnClick>
