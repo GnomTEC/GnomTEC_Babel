@@ -1,0 +1,11 @@
+## Interface: 40300
+## Title: GnomTEC_Babel
+## Notes: Antidiskriminierungsaddon welches die eigentlich verwendete Sprache durch [Sprache]-Prefix ersetzt
+## Author: Lugus Sprengfix
+## Version: 0.1
+## SavedVariablesPerCharacter: GnomTEC_Babel_Options
+
+embeds.xml
+
+GnomTEC_Babel.lua
+GnomTEC_Babel.xml

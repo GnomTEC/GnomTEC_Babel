@@ -1,0 +1,6 @@
+﻿GnomTEC Babel Addon - Change History 
+==========================
+
+V0.1 (2011-12-10)
+============
+- Initiale Version
