@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Babel
--- Version: 5.4.1.11
+-- Version: 5.4.2.12
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -287,11 +287,52 @@ function GnomTEC_Babel:Translate(msg, chatType, languageID, channel)
 			if ((not languageID) or (LANGUAGE_ORCISH == languageID) or (LANGUAGE_COMMON == languageID)) then
 				self.hooks.SendChatMessage(msg,chatType,nil, channel)
 			else
+				local maxlen				
 				if (languageID < 0) then
-					self.hooks.SendChatMessage("["..GnomTEC_Babel_Options["AdditionalLanguages"][-languageID].."] "..msg,chatType,nil, channel)
+					maxlen = 255 - string.len("["..GnomTEC_Babel_Options["AdditionalLanguages"][-languageID].."] ")
 				else				
-					self.hooks.SendChatMessage("["..GnomTEC_Babel:SetLanguage(languageID).."] "..msg,chatType,nil, channel)
+					maxlen = 255 - string.len("["..GnomTEC_Babel:SetLanguage(languageID).."] ")
 				end
+	
+				if (string.len(msg) <= maxlen) then
+					if (languageID < 0) then
+						self.hooks.SendChatMessage("["..GnomTEC_Babel_Options["AdditionalLanguages"][-languageID].."] "..msg,chatType,nil, channel)
+					else				
+						self.hooks.SendChatMessage("["..GnomTEC_Babel:SetLanguage(languageID).."] "..msg,chatType,nil, channel)
+					end
+				else
+					local m = ""
+					local w
+
+					for w in string.gmatch(msg, "[^ ]+") do
+						if ((string.len(m) + string.len(w)) + 1 <= maxlen) then
+							if ("" ~= m) then
+								m = m.." "..w
+							else
+								m = w
+							end
+						else
+							if ("" == m) then
+								-- nobody should type single words that are too long for a line, but if...
+								m = string.sub(w,1,maxlen)
+								w = ""
+							end
+							if (languageID < 0) then
+								self.hooks.SendChatMessage("["..GnomTEC_Babel_Options["AdditionalLanguages"][-languageID].."] "..m,chatType,nil, channel)
+							else				
+								self.hooks.SendChatMessage("["..GnomTEC_Babel:SetLanguage(languageID).."] "..m,chatType,nil, channel)
+							end
+							m = w
+						end
+					end
+					if ("" ~= m) then
+						if (languageID < 0) then
+							self.hooks.SendChatMessage("["..GnomTEC_Babel_Options["AdditionalLanguages"][-languageID].."] "..m,chatType,nil, channel)
+						else				
+							self.hooks.SendChatMessage("["..GnomTEC_Babel:SetLanguage(languageID).."] "..m,chatType,nil, channel)
+						end
+					end
+				end								
 			end
 		else
 			self.hooks.SendChatMessage(msg,chatType,languageID, channel)

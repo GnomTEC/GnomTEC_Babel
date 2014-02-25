@@ -1,6 +1,10 @@
 GnomTEC Babel Addon - Change History 
 ==========================
 
+5.4.2.12 (2013-12-26)
+============
+- Improved handling of long texts which should no longer be cut off
+
 5.4.1.11 (2013-11-26)
 ============
 - Updated Ace3 libraries to version r1104
