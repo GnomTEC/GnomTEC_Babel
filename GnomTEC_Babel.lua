@@ -1,8 +1,8 @@
 ﻿-- **********************************************************************
 -- GnomTEC Babel
--- Version: 0.6
--- Author: Lugus Sprengfix
--- Copyright 2011-2012 by GnomTEC
+-- Version: 5.3.0.7
+-- Author: GnomTEC
+-- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
 -- **********************************************************************
 -- load localization first.
@@ -14,10 +14,30 @@ local L = LibStub("AceLocale-3.0"):GetLocale("GnomTEC_Babel")
 
 GnomTEC_Babel_Options = {
 	["Enabled"] = true,
-	["Language"] = GetDefaultLanguage(),
+	["LanguageID"] = select(2, GetLanguageByIndex(1)),
 	["LanguageSelectorEnabled"] = true,
-	
 }
+
+-- ----------------------------------------------------------------------
+-- Addon global Constants (local)
+-- ----------------------------------------------------------------------
+-- Horde
+local LANGUAGE_ORCISH					= 1
+local LANGUAGE_TAURAHE 					= 3
+local LANGUAGE_THALASSIAN				= 10
+local LANGUAGE_ZANDALI					= 14
+local LANGUAGE_FORSAKEN					= 33
+local LANGUAGE_GOBLIN					= 40
+local LANGUAGE_PANDAREN_HORDE			= 44
+-- Alliance
+local LANGUAGE_DARNASSIAN				= 2
+local LANGUAGE_DWARVISH					= 6
+local LANGUAGE_COMMON					= 7
+local LANGUAGE_GNOMISH					= 13
+local LANGUAGE_DRAENEI					= 35
+local LANGUAGE_PANDAREN_ALLIANCE		= 43
+-- Other
+local LANGUAGE_Demonic					= 8
 
 -- ----------------------------------------------------------------------
 -- Addon global variables (local)
@@ -37,8 +57,8 @@ local optionsMain = {
 			type = "toggle",
 			name = L["L_OPTIONS_ENABLE"],
 			desc = "",
-			set = function(info,val) GnomTEC_Babel_Options["Enable"] = val;  end,
-			get = function(info) return GnomTEC_Babel_Options["Enable"] end,
+			set = function(info,val) GnomTEC_Babel_Options["Enabled"] = val;  end,
+			get = function(info) return GnomTEC_Babel_Options["Enabled"] end,
 			width = 'full',
 			order = 2
 		},
@@ -65,7 +85,7 @@ local optionsMain = {
 				descriptionAuthor = {
 					order = 2,
 					type = "description",
-					name = "|cffffd700".."Autor"..": ".."|cffff8c00".."Lugus Sprengfix",
+					name = "|cffffd700".."Autor"..": ".."|cffff8c00".."GnomTEC",
 				},
 				descriptionEmail = {
 					order = 3,
@@ -80,7 +100,7 @@ local optionsMain = {
 				descriptionLicense = {
 					order = 5,
 					type = "description",
-					name = "|cffffd700".."Copyright"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"].."(c)2011 by GnomTEC",
+					name = "|cffffd700".."Copyright"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"].."(c)2011-2013 by GnomTEC",
 				},
 			}
 		},
@@ -107,18 +127,40 @@ LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Babel Main", "GnomTEC B
 -- ----------------------------------------------------------------------
 -- Local functions
 -- ----------------------------------------------------------------------
+function GnomTEC_Babel:SetLanguage(ID)
+	local i = 1
+	local languageName, languageID
+	GnomTEC_Babel_Options["LanguageID"] = ID
+	repeat
+		languageName, languageID = GetLanguageByIndex(i)
+		if (languageID == GnomTEC_Babel_Options["LanguageID"]) then
+			i = 0
+		else
+			i = i + 1
+		end
+	until ((i < 1) or (i > GetNumLanguages()))
+	if (i > 0) then
+		-- we can not speak the given language so change to the first one
+		languageName, GnomTEC_Babel_Options["LanguageID"] = GetLanguageByIndex(1)
+	end
+ 	GNOMTEC_BABEL_FRAME_LANGUAGE:SetText(languageName or "")
+ 	return languageName
+end
+
 
 -- ----------------------------------------------------------------------
 -- Frame event handler and functions
 -- ----------------------------------------------------------------------
 function GnomTEC_Babel:ChangeLanguage()
-	local i = 1
+ 	local i = 1
+	local languageName, languageID
 	repeat
-		if (GetLanguageByIndex(i) == GnomTEC_Babel_Options["Language"]) then
+		languageName, languageID = GetLanguageByIndex(i)
+		if (languageID == GnomTEC_Babel_Options["LanguageID"]) then
 			if (GetNumLanguages() > i) then
-				GnomTEC_Babel_Options["Language"] = GetLanguageByIndex(i+1)
+				languageName, GnomTEC_Babel_Options["LanguageID"] = GetLanguageByIndex(i+1)
 			else
-				GnomTEC_Babel_Options["Language"] = GetLanguageByIndex(1)
+				languageName, GnomTEC_Babel_Options["LanguageID"] = GetLanguageByIndex(1)
 			end
 			i = 0
 		else
@@ -126,30 +168,33 @@ function GnomTEC_Babel:ChangeLanguage()
 		end
 	until ((i < 1) or (i > GetNumLanguages()))
 	if (i > 0) then
-		GnomTEC_Babel_Options["Language"] = GetLanguageByIndex(1)
+		-- we can not speak the given language so change to the first one
+		languageName, GnomTEC_Babel_Options["LanguageID"] = GetLanguageByIndex(1)
 	end
- 	GNOMTEC_BABEL_FRAME_LANGUAGE:SetText(GnomTEC_Babel_Options["Language"])
+ 	GNOMTEC_BABEL_FRAME_LANGUAGE:SetText(languageName or "")
 end
 
 -- ----------------------------------------------------------------------
 -- Hook functions
 -- ----------------------------------------------------------------------
-function GnomTEC_Babel:Translate(msg, chatType, language, channel)	
+function GnomTEC_Babel:Translate(msg, chatType, languageID, channel)	
 	if ((chatType == "SAY") or (chatType == "YELL")) then
 		if (GnomTEC_Babel_Options["LanguageSelectorEnabled"]) then
-			language = GnomTEC_Babel_Options["Language"]
+			-- check if we know this language yet, when not will be reset to common
+			GnomTEC_Babel:SetLanguage(GnomTEC_Babel_Options["LanguageID"])
+			languageID = GnomTEC_Babel_Options["LanguageID"]
 		end
-		if (GnomTEC_Babel_Options["Enable"]) then
-			if ((not language) or (language == "Gemeinsprache") or (language == "Common")) then
-				self.hooks.SendChatMessage(msg,chatType,language, channel)
+		if (GnomTEC_Babel_Options["Enabled"]) then
+			if ((not languageID) or (LANGUAGE_ORCISH == languageID) or (LANGUAGE_DARNASSIAN == languageID)) then
+				self.hooks.SendChatMessage(msg,chatType,nil, channel)
 			else
-				self.hooks.SendChatMessage("["..language.."] "..msg,chatType,nil, channel)
+				self.hooks.SendChatMessage("["..GnomTEC_Babel:SetLanguage(languageID).."] "..msg,chatType,nil, channel)
 			end
 		else
-			self.hooks.SendChatMessage(msg,chatType,language, channel)
+			self.hooks.SendChatMessage(msg,chatType,languageID, channel)
 		end
 	else
-		self.hooks.SendChatMessage(msg,chatType,language, channel)
+		self.hooks.SendChatMessage(msg,chatType,languageID, channel)
 	end
 end
 
@@ -178,17 +223,24 @@ function GnomTEC_Babel:OnEnable()
 	if (nil == GnomTEC_Babel_Options["LanguageSelectorEnabled"]) then
 		GnomTEC_Babel_Options["LanguageSelectorEnabled"] = GnomTEC_Babel_Options["Enabled"]
 	end
-	
+	if (nil == GnomTEC_Babel_Options["LanguageID"]) then
+		GnomTEC_Babel_Options["LanguageID"] = select(2, GetLanguageByIndex(1))
+		GnomTEC_Babel_Options["Language"] = nil
+	end
+		
 	-- Show GUI
 	if (GnomTEC_Babel_Options["LanguageSelectorEnabled"]) then
 		GNOMTEC_BABEL_FRAME:Show()
 	end
+
+	GnomTEC_Babel:SetLanguage(GnomTEC_Babel_Options["LanguageID"])
+
 end
 
 function GnomTEC_Babel:OnDisable()
     -- Called when the addon is disabled
     
-    GnomTEC_Babel:UnregisterAllEvents();
+	GnomTEC_Babel:UnregisterAllEvents();
 	GNOMTEC_BABEL_FRAME:Hide()
 
 end
