@@ -1,9 +1,13 @@
 GnomTEC Babel Addon - Change History 
 ==========================
 
+5.4.0.10 (2013-09-14)
+============
+- Updated interface version for WoW update 5.4.0
+
 5.3.0.9 (2013-06-29)
 ============
-- workaround added for issue with GetNumLanguages() in dropdown initialization direct after login
+- Workaround added for issue with GetNumLanguages() in dropdown initialization direct after login
 
 5.3.0.8 (2013-06-28)
 ============
