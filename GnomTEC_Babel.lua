@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Babel
--- Version: 5.3.0.7
+-- Version: 5.3.0.8
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -16,6 +16,7 @@ GnomTEC_Babel_Options = {
 	["Enabled"] = true,
 	["LanguageID"] = select(2, GetLanguageByIndex(1)),
 	["LanguageSelectorEnabled"] = true,
+	["AdditionalLanguages"] ={},
 }
 
 -- ----------------------------------------------------------------------
@@ -38,6 +39,8 @@ local LANGUAGE_DRAENEI					= 35
 local LANGUAGE_PANDAREN_ALLIANCE		= 43
 -- Other
 local LANGUAGE_Demonic					= 8
+
+local MaxUserDefinedLanguages = 5
 
 -- ----------------------------------------------------------------------
 -- Addon global variables (local)
@@ -115,6 +118,68 @@ local optionsMain = {
 		},
 	}
 }
+
+local optionsLanguages = {
+	name = L["L_OPTIONS_LANGUAGES"],
+	type = 'group',
+	args = {
+		language1 = {
+			type = "input",
+			name = L["L_OPTIONS_LANGUAGES_1"],
+			desc = "",
+			disabled = function(info) return not GnomTEC_Babel_Options["Enabled"] end,
+			set = function(info,val) GnomTEC_Babel_Options["AdditionalLanguages"][1] = val end,
+	   	get = function(info) return GnomTEC_Babel_Options["AdditionalLanguages"][1] end,
+			multiline = false,
+			width = 'full',
+			order = 1
+		},
+		language2 = {
+			type = "input",
+			name = L["L_OPTIONS_LANGUAGES_2"],
+			desc = "",
+			disabled = function(info) return not GnomTEC_Babel_Options["Enabled"] end,
+			set = function(info,val) GnomTEC_Babel_Options["AdditionalLanguages"][2] = val end,
+	   	get = function(info) return GnomTEC_Babel_Options["AdditionalLanguages"][2] end,
+			multiline = false,
+			width = 'full',
+			order = 1
+		},
+		language3 = {
+			type = "input",
+			name = L["L_OPTIONS_LANGUAGES_3"],
+			desc = "",
+			disabled = function(info) return not GnomTEC_Babel_Options["Enabled"] end,
+			set = function(info,val) GnomTEC_Babel_Options["AdditionalLanguages"][3] = val end,
+	   	get = function(info) return GnomTEC_Babel_Options["AdditionalLanguages"][3] end,
+			multiline = false,
+			width = 'full',
+			order = 1
+		},
+		language4 = {
+			type = "input",
+			name = L["L_OPTIONS_LANGUAGES_4"],
+			desc = "",
+			disabled = function(info) return not GnomTEC_Babel_Options["Enabled"] end,
+			set = function(info,val) GnomTEC_Babel_Options["AdditionalLanguages"][4] = val end,
+	   	get = function(info) return GnomTEC_Babel_Options["AdditionalLanguages"][4] end,
+			multiline = false,
+			width = 'full',
+			order = 1
+		},
+		language5 = {
+			type = "input",
+			name = L["L_OPTIONS_LANGUAGES_5"],
+			desc = "",
+			disabled = function(info) return not GnomTEC_Babel_Options["Enabled"] end,
+			set = function(info,val) GnomTEC_Babel_Options["AdditionalLanguages"][5] = val end,
+	   	get = function(info) return GnomTEC_Babel_Options["AdditionalLanguages"][5] end,
+			multiline = false,
+			width = 'full',
+			order = 1
+		},
+	}
+}
 	
 -- ----------------------------------------------------------------------
 -- Startup initialization
@@ -122,28 +187,43 @@ local optionsMain = {
 
 GnomTEC_Babel = LibStub("AceAddon-3.0"):NewAddon("GnomTEC_Babel", "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0")
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Babel Main", optionsMain)
+LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Babel Languages", optionsLanguages)
 LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Babel Main", "GnomTEC Babel");
+LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Babel Languages", L["L_OPTIONS_LANGUAGES"], "GnomTEC Babel");
 
 -- ----------------------------------------------------------------------
 -- Local functions
 -- ----------------------------------------------------------------------
+
+-- function which returns also nil for empty strings
+local function emptynil( x ) return x ~= "" and x or nil end
+
 function GnomTEC_Babel:SetLanguage(ID)
 	local i = 1
 	local languageName, languageID
 	GnomTEC_Babel_Options["LanguageID"] = ID
-	repeat
-		languageName, languageID = GetLanguageByIndex(i)
-		if (languageID == GnomTEC_Babel_Options["LanguageID"]) then
-			i = 0
-		else
-			i = i + 1
+	
+	if (ID < 0) then
+		if (GnomTEC_Babel_Options["Enabled"] and (nil ~= emptynil(GnomTEC_Babel_Options["AdditionalLanguages"][-ID]))) then
+			languageName = GnomTEC_Babel_Options["AdditionalLanguages"][-ID]
+		else	
+			languageName, GnomTEC_Babel_Options["LanguageID"] = GetLanguageByIndex(1)
+		end		
+	else
+		repeat
+			languageName, languageID = GetLanguageByIndex(i)
+			if (languageID == GnomTEC_Babel_Options["LanguageID"]) then
+				i = 0
+			else
+				i = i + 1
+			end
+		until ((i < 1) or (i > GetNumLanguages()))
+		if (i > 0) then
+			-- we can not speak the given language so change to the first one
+			languageName, GnomTEC_Babel_Options["LanguageID"] = GetLanguageByIndex(1)
 		end
-	until ((i < 1) or (i > GetNumLanguages()))
-	if (i > 0) then
-		-- we can not speak the given language so change to the first one
-		languageName, GnomTEC_Babel_Options["LanguageID"] = GetLanguageByIndex(1)
 	end
- 	GNOMTEC_BABEL_FRAME_LANGUAGE:SetText(languageName or "")
+ 	GNOMTEC_BABEL_FRAME_SELECTLANGUAGE_BUTTON:SetText(languageName or "")
  	return languageName
 end
 
@@ -151,27 +231,44 @@ end
 -- ----------------------------------------------------------------------
 -- Frame event handler and functions
 -- ----------------------------------------------------------------------
-function GnomTEC_Babel:ChangeLanguage()
- 	local i = 1
-	local languageName, languageID
+
+-- initialize drop down menu languages
+local function GnomTEC_Babel_SelectLanguage_InitializeDropDown(level)
+	local i = 1
+	local language = {
+		notCheckable = 1,
+		func = function (self, arg1, arg2, checked) GnomTEC_Babel:SetLanguage(arg2) end
+	}
+
 	repeat
-		languageName, languageID = GetLanguageByIndex(i)
-		if (languageID == GnomTEC_Babel_Options["LanguageID"]) then
-			if (GetNumLanguages() > i) then
-				languageName, GnomTEC_Babel_Options["LanguageID"] = GetLanguageByIndex(i+1)
-			else
-				languageName, GnomTEC_Babel_Options["LanguageID"] = GetLanguageByIndex(1)
+		language.arg1, language.arg2 = GetLanguageByIndex(i)	
+		language.text = language.arg1
+		UIDropDownMenu_AddButton(language)
+		i = i + 1
+	until (i > GetNumLanguages())
+	
+	i = 1
+	if (GnomTEC_Babel_Options["Enabled"]) then
+		repeat
+			if (nil ~= emptynil(GnomTEC_Babel_Options["AdditionalLanguages"][i])) then
+				language.arg1 = GnomTEC_Babel_Options["AdditionalLanguages"][i]	
+				language.arg2 = -i
+				language.text = language.arg1
+				UIDropDownMenu_AddButton(language)
 			end
-			i = 0
-		else
 			i = i + 1
-		end
-	until ((i < 1) or (i > GetNumLanguages()))
-	if (i > 0) then
-		-- we can not speak the given language so change to the first one
-		languageName, GnomTEC_Babel_Options["LanguageID"] = GetLanguageByIndex(1)
+		until (i > MaxUserDefinedLanguages)
 	end
- 	GNOMTEC_BABEL_FRAME_LANGUAGE:SetText(languageName or "")
+end
+
+-- select languages drop down menu OnLoad
+function GnomTEC_Babel:SelectLanguage_DropDown_OnLoad(self)
+	UIDropDownMenu_Initialize(self, GnomTEC_Babel_SelectLanguage_InitializeDropDown, "MENU")
+end
+
+-- select languages drop down menu OnClick
+function GnomTEC_Babel:SelectLanguage_Button_OnClick(self, button, down)
+	ToggleDropDownMenu(1, nil, GNOMTEC_BABEL_FRAME_SELECTLANGUAGE_DROPDOWN, self:GetName(), 0, 0)
 end
 
 -- ----------------------------------------------------------------------
@@ -185,10 +282,14 @@ function GnomTEC_Babel:Translate(msg, chatType, languageID, channel)
 			languageID = GnomTEC_Babel_Options["LanguageID"]
 		end
 		if (GnomTEC_Babel_Options["Enabled"]) then
-			if ((not languageID) or (LANGUAGE_ORCISH == languageID) or (LANGUAGE_DARNASSIAN == languageID)) then
+			if ((not languageID) or (LANGUAGE_ORCISH == languageID) or (LANGUAGE_COMMON == languageID)) then
 				self.hooks.SendChatMessage(msg,chatType,nil, channel)
 			else
-				self.hooks.SendChatMessage("["..GnomTEC_Babel:SetLanguage(languageID).."] "..msg,chatType,nil, channel)
+				if (languageID < 0) then
+					self.hooks.SendChatMessage("["..GnomTEC_Babel_Options["AdditionalLanguages"][-languageID].."] "..msg,chatType,nil, channel)
+				else				
+					self.hooks.SendChatMessage("["..GnomTEC_Babel:SetLanguage(languageID).."] "..msg,chatType,nil, channel)
+				end
 			end
 		else
 			self.hooks.SendChatMessage(msg,chatType,languageID, channel)
@@ -226,6 +327,9 @@ function GnomTEC_Babel:OnEnable()
 	if (nil == GnomTEC_Babel_Options["LanguageID"]) then
 		GnomTEC_Babel_Options["LanguageID"] = select(2, GetLanguageByIndex(1))
 		GnomTEC_Babel_Options["Language"] = nil
+	end
+	if (nil == GnomTEC_Babel_Options["AdditionalLanguages"]) then
+		GnomTEC_Babel_Options["AdditionalLanguages"] = {}
 	end
 		
 	-- Show GUI
