@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Babel
--- Version: 0.5
+-- Version: 0.6
 -- Author: Lugus Sprengfix
 -- Copyright 2011-2012 by GnomTEC
 -- http://www.gnomtec.de/
@@ -112,14 +112,23 @@ LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Babel Main", "GnomTEC B
 -- Frame event handler and functions
 -- ----------------------------------------------------------------------
 function GnomTEC_Babel:ChangeLanguage()
-	if (GetNumLanguages() > 1) then	
-		 if (GetLanguageByIndex(1) == GnomTEC_Babel_Options["Language"]) then
-		 	GnomTEC_Babel_Options["Language"] = GetLanguageByIndex(2)
-		 else
-		 	GnomTEC_Babel_Options["Language"] = GetLanguageByIndex(1)
-		 end
-	 	GNOMTEC_BABEL_FRAME_LANGUAGE:SetText(GnomTEC_Babel_Options["Language"])
- 	end	
+	local i = 1
+	repeat
+		if (GetLanguageByIndex(i) == GnomTEC_Babel_Options["Language"]) then
+			if (GetNumLanguages() > i) then
+				GnomTEC_Babel_Options["Language"] = GetLanguageByIndex(i+1)
+			else
+				GnomTEC_Babel_Options["Language"] = GetLanguageByIndex(1)
+			end
+			i = 0
+		else
+			i = i + 1
+		end
+	until ((i < 1) or (i > GetNumLanguages()))
+	if (i > 0) then
+		GnomTEC_Babel_Options["Language"] = GetLanguageByIndex(1)
+	end
+ 	GNOMTEC_BABEL_FRAME_LANGUAGE:SetText(GnomTEC_Babel_Options["Language"])
 end
 
 -- ----------------------------------------------------------------------
@@ -131,7 +140,7 @@ function GnomTEC_Babel:Translate(msg, chatType, language, channel)
 			language = GnomTEC_Babel_Options["Language"]
 		end
 		if (GnomTEC_Babel_Options["Enable"]) then
-			if ((not language) or (language == GetLanguageByIndex(1))) then
+			if ((not language) or (language == "Gemeinsprache") or (language == "Common")) then
 				self.hooks.SendChatMessage(msg,chatType,language, channel)
 			else
 				self.hooks.SendChatMessage("["..language.."] "..msg,chatType,nil, channel)

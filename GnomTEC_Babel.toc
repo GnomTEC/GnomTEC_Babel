@@ -2,7 +2,7 @@
 ## Title: GnomTEC_Babel
 ## Notes: Antidiskriminierungsaddon welches die eigentlich verwendete Sprache durch [Sprache]-Prefix ersetzt
 ## Author: Lugus Sprengfix
-## Version: 0.5
+## Version: 0.6
 ## SavedVariablesPerCharacter: GnomTEC_Babel_Options
 
 embeds.xml

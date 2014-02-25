@@ -1,6 +1,10 @@
 ﻿GnomTEC Babel Addon - Change History 
 ==========================
 
+V0.6 (2012-09-01)
+============
+- Added support for more then two languages and that number of languages could be changed by glyphes
+
 V0.5 (2012-08-29)
 ============
 - Updated interface version for WoW MoP
