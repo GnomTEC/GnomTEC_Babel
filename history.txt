@@ -1,7 +1,12 @@
 ﻿GnomTEC Babel Addon - Change History 
 ==========================
 
-V0.3 (2011-12-xx)
+V0.4 (2012-02-03)
+============
+- Refactoring to new source code layout
+- Added localization functionality and support of enUS
+
+V0.3 (2011-12-26)
 ============
 - Fehler behoben der auftrat wenn language = nil
 

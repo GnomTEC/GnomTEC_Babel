@@ -1,10 +1,29 @@
-﻿GnomTEC_Babel_Options = {
+﻿-- **********************************************************************
+-- GnomTEC Babel
+-- Version: 0.4
+-- Author: Lugus Sprengfix
+-- Copyright 2011-2012 by GnomTEC
+-- http://www.gnomtec.de/
+-- **********************************************************************
+-- load localization first.
+local L = LibStub("AceLocale-3.0"):GetLocale("GnomTEC_Babel")
+
+-- ----------------------------------------------------------------------
+-- Legacy global variables and constants (will be deleted in future)
+-- ----------------------------------------------------------------------
+
+GnomTEC_Babel_Options = {
 	["Enabled"] = true,
 	["Language"] = GetDefaultLanguage(),
 	["LanguageSelectorEnabled"] = true,
 	
 }
 
+-- ----------------------------------------------------------------------
+-- Addon global variables (local)
+-- ----------------------------------------------------------------------
+
+-- Main options menue with general addon information
 local optionsMain = {
 	name = "GnomTEC Babel",
 	type = "group",
@@ -12,11 +31,11 @@ local optionsMain = {
 		descriptionTitle = {
 			order = 1,
 			type = "description",
-			name = "Antidiskriminierungsaddon welches die eigentlich verwendete Sprache durch [Sprache]-Prefix ersetzt\n\n",
+			name = L["L_OPTIONS_TITLE"],
 		},
 		babelOptionEnable = {
 			type = "toggle",
-			name = "Aktiviere Antidiskriminierung",
+			name = L["L_OPTIONS_ENABLE"],
 			desc = "",
 			set = function(info,val) GnomTEC_Babel_Options["Enable"] = val;  end,
 			get = function(info) return GnomTEC_Babel_Options["Enable"] end,
@@ -25,7 +44,7 @@ local optionsMain = {
 		},
 		babelOptionLanguageSelectorEnable = {
 			type = "toggle",
-			name = "Aktiviere Button zur Sprachumschaltung",
+			name = L["L_OPTIONS_BUTTON"],
 			desc = "",
 			set = function(info,val) GnomTEC_Babel_Options["LanguageSelectorEnabled"] = val; if (GnomTEC_Babel_Options["LanguageSelectorEnabled"]) then GNOMTEC_BABEL_FRAME:Show(); else GNOMTEC_BABEL_FRAME:Hide(); end;  end,
 			get = function(info) return GnomTEC_Babel_Options["LanguageSelectorEnabled"] end,
@@ -76,15 +95,67 @@ local optionsMain = {
 		},
 	}
 }
-			
+	
+-- ----------------------------------------------------------------------
+-- Startup initialization
+-- ----------------------------------------------------------------------
+
 GnomTEC_Babel = LibStub("AceAddon-3.0"):NewAddon("GnomTEC_Babel", "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0")
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Babel Main", optionsMain)
 LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Babel Main", "GnomTEC Babel");
 
+-- ----------------------------------------------------------------------
+-- Local functions
+-- ----------------------------------------------------------------------
+
+-- ----------------------------------------------------------------------
+-- Frame event handler and functions
+-- ----------------------------------------------------------------------
+function GnomTEC_Babel:ChangeLanguage()
+	if (GetNumLanguages() > 1) then	
+		 if (GetLanguageByIndex(1) == GnomTEC_Babel_Options["Language"]) then
+		 	GnomTEC_Babel_Options["Language"] = GetLanguageByIndex(2)
+		 else
+		 	GnomTEC_Babel_Options["Language"] = GetLanguageByIndex(1)
+		 end
+	 	GNOMTEC_BABEL_FRAME_LANGUAGE:SetText(GnomTEC_Babel_Options["Language"])
+ 	end	
+end
+
+-- ----------------------------------------------------------------------
+-- Hook functions
+-- ----------------------------------------------------------------------
+function GnomTEC_Babel:Translate(msg, chatType, language, channel)	
+	if ((chatType == "SAY") or (chatType == "YELL")) then
+		if (GnomTEC_Babel_Options["LanguageSelectorEnabled"]) then
+			language = GnomTEC_Babel_Options["Language"]
+		end
+		if (GnomTEC_Babel_Options["Enable"]) then
+			if ((not language) or (language == GetLanguageByIndex(1))) then
+				self.hooks.SendChatMessage(msg,chatType,language, channel)
+			else
+				self.hooks.SendChatMessage("["..language.."] "..msg,chatType,nil, channel)
+			end
+		else
+			self.hooks.SendChatMessage(msg,chatType,language, channel)
+		end
+	else
+		self.hooks.SendChatMessage(msg,chatType,language, channel)
+	end
+end
+
+-- ----------------------------------------------------------------------
+-- Event handler
+-- ----------------------------------------------------------------------
+
+-- ----------------------------------------------------------------------
+-- Addon OnInitialize, OnEnable and OnDisable
+-- ----------------------------------------------------------------------
+
 function GnomTEC_Babel:OnInitialize()
  	-- Code that you want to run when the addon is first loaded goes here.
   
-  	GnomTEC_Babel:Print("Willkommen bei GnomTEC_Babel")
+  	GnomTEC_Babel:Print(L["L_WELCOME"])
   	  	
 end
 
@@ -113,34 +184,7 @@ function GnomTEC_Babel:OnDisable()
 
 end
 
-function GnomTEC_Babel:Translate(msg, chatType, language, channel)	
-	if ((chatType == "SAY") or (chatType == "YELL")) then
-		if (GnomTEC_Babel_Options["LanguageSelectorEnabled"]) then
-			language = GnomTEC_Babel_Options["Language"]
-		end
-		if (GnomTEC_Babel_Options["Enable"]) then
-			if ((not language) or (language == GetLanguageByIndex(1))) then
-				self.hooks.SendChatMessage(msg,chatType,language, channel)
-			else
-				self.hooks.SendChatMessage("["..language.."] "..msg,chatType,nil, channel)
-			end
-		else
-			self.hooks.SendChatMessage(msg,chatType,language, channel)
-		end
-	else
-		self.hooks.SendChatMessage(msg,chatType,language, channel)
-	end
-end
-
-function GnomTEC_Babel:ChangeLanguage()
-	if (GetNumLanguages() > 1) then	
-		 if (GetLanguageByIndex(1) == GnomTEC_Babel_Options["Language"]) then
-		 	GnomTEC_Babel_Options["Language"] = GetLanguageByIndex(2)
-		 else
-		 	GnomTEC_Babel_Options["Language"] = GetLanguageByIndex(1)
-		 end
-	 	GNOMTEC_BABEL_FRAME_LANGUAGE:SetText(GnomTEC_Babel_Options["Language"])
- 	end	
-end
-
+-- ----------------------------------------------------------------------
+-- External API
+-- ----------------------------------------------------------------------
 
