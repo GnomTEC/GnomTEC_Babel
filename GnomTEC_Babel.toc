@@ -1,8 +1,18 @@
 ## Interface: 50400
 ## Title: GnomTEC_Babel
-## Notes: Antidiskriminierungsaddon welches die eigentlich verwendete Sprache durch [Sprache]-Prefix ersetzt
+## Notes: Anti-discrimination addon that replaces the language actually used by [language] prefix.
+## Notes-deDE: Antidiskriminierungsaddon welches die eigentlich verwendete Sprache durch [Sprache]-Prefix ersetzt.
+## Notes-esES: Antidiscriminación addon que reemplaza el lenguaje realmente utilizado por el prefijo [idioma].
+## Notes-esMX: Antidiscriminación addon que reemplaza el lenguaje realmente utilizado por el prefijo [idioma].
+## Notes-frFR: Anti-discrimination addon qui remplace la langue effectivement utilisée par [langue] préfixe.
+## Notes-itIT: Anti-discriminazione addon che sostituisce il linguaggio effettivamente utilizzata di [lingua] prefisso.
+## Notes-koKR: 차별 실제로 [언어] 접두사에 의해 사용되는 언어를 대체 애드온.
+## Notes-ptBR: Anti-discriminação addon que substitui a língua realmente utilizada por [idioma] prefixo.
+## Notes-ruRU: Антидискриминационное аддон, который заменяет язык фактически используемую [язык] префикса.
+## Notes-zhCN: 反歧视插件，代替实际使用的[语言]前缀的语言。
+## Notes-zhTW: 反歧視插件，代替實際使用的[語言]前綴的語言。
 ## Author: GnomTEC
-## Version: 5.4.0.10
+## Version: 5.4.1.11
 ## SavedVariablesPerCharacter: GnomTEC_Babel_Options
 
 embeds.xml
