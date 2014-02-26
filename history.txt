@@ -1,5 +1,8 @@
 == GnomTEC Babel - Change History 
 
+=== 5.4.7.14 (2014-02-26)
+* Update caused by packaging issue
+
 === 5.4.7.13 (2014-02-25)
 * Added support of GnomTEC_Assistant.
 

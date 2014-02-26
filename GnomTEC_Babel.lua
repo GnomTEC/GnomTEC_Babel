@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Babel
--- Version: 5.4.7.13
+-- Version: 5.4.7.14
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -24,7 +24,7 @@ GnomTEC_Babel_Options = {
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "5.4.7.13"
+local addonVersion = "5.4.7.14"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {

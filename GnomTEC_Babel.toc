@@ -12,7 +12,7 @@
 ## Notes-zhCN: 反歧视插件，代替实际使用的[语言]前缀的语言。
 ## Notes-zhTW: 反歧視插件，代替實際使用的[語言]前綴的語言。
 ## Author: GnomTEC
-## Version: 5.4.7.13
+## Version: 5.4.7.14
 ## OptionalDeps: GnomTEC_Assistant
 ## SavedVariablesPerCharacter: GnomTEC_Babel_Options
 
