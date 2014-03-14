@@ -1,5 +1,8 @@
 == GnomTEC Babel - Change History 
 
+=== 5.4.7.15 (2014-03-15)
+* Maintenance update
+
 === 5.4.7.14 (2014-02-26)
 * Update caused by packaging issue
 
