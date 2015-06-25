@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Babel
--- Version: 6.1.0.18
+-- Version: 6.2.0.19
 -- Author: GnomTEC
 -- Copyright 2011-2015 by GnomTEC
 -- http://www.gnomtec.de/
@@ -30,7 +30,7 @@ local addonVersion = "6.1.0.18"
 local addonInfo = {
 	["Name"] = "GnomTEC Babel",
 	["Version"] = addonVersion,
-	["Date"] = "2015-02-25",
+	["Date"] = "2015-06-25",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
