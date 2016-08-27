@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Babel
--- Version: 7.0.3.20
+-- Version: 7.0.3.21
 -- Author: GnomTEC
 -- Copyright 2011-2016 by GnomTEC
 -- http://www.gnomtec.de/
@@ -24,13 +24,13 @@ GnomTEC_Babel_Options = {
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "7.0.3.20"
+local addonVersion = "7.0.3.21"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Babel",
 	["Version"] = addonVersion,
-	["Date"] = "2016-07-20",
+	["Date"] = "2016-08-27",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
@@ -205,6 +205,19 @@ local optionsLanguages = {
 		},
 	}
 }
+
+local addonDataObject =	{
+	type = "data source",
+	text = "---",
+	label = "GnomTEC Babel",
+	icon = [[Interface\Icons\Inv_Misc_Tournaments_banner_Gnome]],
+	OnClick = function(self, button)
+		ToggleDropDownMenu(1, nil, GNOMTEC_BABEL_FRAME_LDB_SELECTLANGUAGE_DROPDOWN, self:GetName(), 0, 0)
+	end,
+	OnTooltipShow = function(tooltip)
+		GnomTEC_Babel:ShowAddonTooltip(tooltip)
+	end,
+}
 	
 -- ----------------------------------------------------------------------
 -- Startup initialization
@@ -215,6 +228,8 @@ LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Babel Main", optionsMain)
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Babel Languages", optionsLanguages)
 LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Babel Main", "GnomTEC Babel");
 LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Babel Languages", L["L_OPTIONS_LANGUAGES"], "GnomTEC Babel");
+
+local ldb = LibStub:GetLibrary("LibDataBroker-1.1")local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
 
 -- ----------------------------------------------------------------------
 -- Local stubs for the GnomTEC API
@@ -262,6 +277,7 @@ function GnomTEC_Babel:SetLanguage(ID)
 		end
 	end
  	GNOMTEC_BABEL_FRAME_SELECTLANGUAGE_BUTTON:SetText(languageName or "")
+ 	addonDataObject.text = languageName or ""
  	return languageName
 end
 
@@ -311,16 +327,19 @@ function GnomTEC_Babel:SelectLanguage_Button_OnClick(self, button, down)
 	ToggleDropDownMenu(1, nil, GNOMTEC_BABEL_FRAME_SELECTLANGUAGE_DROPDOWN, self:GetName(), 0, 0)
 end
 
+-- select languages drop down menu OnLoad (LDB)
+function GnomTEC_Babel:LDB_SelectLanguage_DropDown_OnLoad(self)
+	UIDropDownMenu_Initialize(self, GnomTEC_Babel_SelectLanguage_InitializeDropDown, "MENU")
+end
+
 -- ----------------------------------------------------------------------
 -- Hook functions
 -- ----------------------------------------------------------------------
 function GnomTEC_Babel:Translate(msg, chatType, languageID, channel)	
 	if ((chatType == "SAY") or (chatType == "YELL")) then
-		if (GnomTEC_Babel_Options["LanguageSelectorEnabled"]) then
-			-- check if we know this language yet, when not will be reset to common
-			GnomTEC_Babel:SetLanguage(GnomTEC_Babel_Options["LanguageID"])
-			languageID = GnomTEC_Babel_Options["LanguageID"]
-		end
+		-- check if we know this language yet, when not will be reset to common
+		GnomTEC_Babel:SetLanguage(GnomTEC_Babel_Options["LanguageID"])
+		languageID = GnomTEC_Babel_Options["LanguageID"]
 		if (GnomTEC_Babel_Options["Enabled"]) then
 			if ((not languageID) or (LANGUAGE_ORCISH == languageID) or (LANGUAGE_COMMON == languageID)) then
 				self.hooks.SendChatMessage(msg,chatType,nil, channel)
@@ -383,7 +402,11 @@ end
 -- ----------------------------------------------------------------------
 -- Event handler
 -- ----------------------------------------------------------------------
-
+	function	GnomTEC_Babel:ShowAddonTooltip(tooltip)
+		tooltip:AddLine("GnomTEC Babel",1.0,1.0,1.0)
+		tooltip:AddLine(L["L_LDB_HINT"],0.0,1.0,0.0)
+	end	
+	
 -- ----------------------------------------------------------------------
 -- Addon OnInitialize, OnEnable and OnDisable
 -- ----------------------------------------------------------------------
@@ -418,6 +441,9 @@ function GnomTEC_Babel:OnEnable()
 	if (GnomTEC_Babel_Options["LanguageSelectorEnabled"]) then
 		GNOMTEC_BABEL_FRAME:Show()
 	end
+	
+	-- Setup LDB
+	addonDataObject = ldb:NewDataObject("GnomTEC Babel", addonDataObject)
 
 	GnomTEC_Babel:SetLanguage(GnomTEC_Babel_Options["LanguageID"])
 

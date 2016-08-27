@@ -39,4 +39,11 @@
 			<OnMouseUp>self:StopMovingOrSizing();</OnMouseUp>
 		</Scripts>
 	</Frame>
+	<Frame name="GNOMTEC_BABEL_FRAME_LDB_SELECTLANGUAGE_DROPDOWN" inherits="UIDropDownMenuTemplate" id="1">
+		<Scripts>
+			<OnLoad>
+				GnomTEC_Babel:LDB_SelectLanguage_DropDown_OnLoad(self)
+			</OnLoad>
+		</Scripts>
+	</Frame>
 </Ui>
