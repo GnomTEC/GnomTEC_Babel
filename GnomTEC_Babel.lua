@@ -1,9 +1,22 @@
 ﻿-- **********************************************************************
 -- GnomTEC Babel
--- Version: 7.1.0.22
--- Author: GnomTEC
--- Copyright 2011-2016 by GnomTEC
--- http://www.gnomtec.de/
+-- Version: 7.2.0.23
+-- Author: Peter Jack
+-- URL: http://www.gnomtec.de/
+-- **********************************************************************
+-- Copyright © 2011-2017 by Peter Jack
+--
+-- Licensed under the EUPL, Version 1.1 only (the "Licence");
+-- You may not use this work except in compliance with the Licence.
+-- You may obtain a copy of the Licence at:
+--
+-- http://ec.europa.eu/idabc/eupl5
+--
+-- Unless required by applicable law or agreed to in writing, software
+-- distributed under the Licence is distributed on an "AS IS" basis,
+-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-- See the Licence for the specific language governing permissions and
+-- limitations under the Licence.
 -- **********************************************************************
 -- load localization first.
 local L = LibStub("AceLocale-3.0"):GetLocale("GnomTEC_Babel")
@@ -24,17 +37,17 @@ GnomTEC_Babel_Options = {
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "7.1.0.22"
+local addonVersion = "7.2.0.23"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Babel",
 	["Version"] = addonVersion,
-	["Date"] = "2016-10-30",
-	["Author"] = "GnomTEC",
+	["Date"] = "2017-04-01",
+	["Author"] = "Peter Jack",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
-	["Copyright"] = "(c)2011-2016 by GnomTEC",
+	["Copyright"] = "(c)2011-2017 by Peter Jack",
 }
 
 -- GnomTEC API revision
