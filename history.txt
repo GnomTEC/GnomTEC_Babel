@@ -1,5 +1,9 @@
 == GnomTEC Babel - Change History 
 
+=== 8.0.1.25 (2018-07-16)
+* Updated TOC for WoW patch 8.0.0 (BfA)
+* Updated libraries: Ace3, ChatThrottleLib
+
 === 7.3.0.24 (2017-08-30)
 * Updated TOC for WoW patch 7.3.0
 * Updated included libraries: Ace3
