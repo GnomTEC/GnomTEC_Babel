@@ -1,5 +1,5 @@
-## Interface: 11302
-# retail: 80205 classic: 11302
+## Interface: 11303
+# retail: 80205 classic: 11303
 ## Title: GnomTEC_Babel
 ## Notes: Anti-discrimination addon that replaces the language actually used by [language] prefix.
 ## Notes-deDE: Antidiskriminierungsaddon welches die eigentlich verwendete Sprache durch [Sprache]-Prefix ersetzt.
@@ -13,7 +13,7 @@
 ## Notes-zhCN: 反歧视插件，代替实际使用的[语言]前缀的语言。
 ## Notes-zhTW: 反歧視插件，代替實際使用的[語言]前綴的語言。
 ## Author: GnomTEC
-## Version: 8.2.5.26
+## Version: 8.2.5.27
 ## SavedVariablesPerCharacter: GnomTEC_Babel_Options
 
 embeds.xml
