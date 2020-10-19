@@ -1,5 +1,8 @@
 == GnomTEC Babel - Change History 
 
+=== 9.0.1.29 (2020-10-19)
+* Removed wrong backdrop colors in GUI xml
+
 === 9.0.1.28 (2020-10-15)
 * Updated TOC for WoW patch 9.0.1
 * Updated libraries: Ace3
