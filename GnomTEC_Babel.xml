@@ -6,7 +6,6 @@
 		</Anchors>
 		<KeyValues>
 			<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
-			<KeyValue key="backdropBorderColorAlpha" value="0.25" type="number"/>
 		</KeyValues>
 		<Frames>
 			<Button name="$parent_SELECTLANGUAGE_BUTTON" inherits="GameMenuButtonTemplate" text="">
