@@ -1,10 +1,10 @@
 ﻿-- **********************************************************************
 -- GnomTEC Babel
--- Version: 9.0.2.29
+-- Version: 9.0.5.29
 -- Author: Peter Jack
 -- URL: http://www.gnomtec.de/
 -- **********************************************************************
--- Copyright © 2011-2020 by Peter Jack
+-- Copyright © 2011-2021 by Peter Jack
 --
 -- Licensed under the EUPL, Version 1.1 only (the "Licence");
 -- You may not use this work except in compliance with the Licence.
@@ -37,17 +37,17 @@ GnomTEC_Babel_Options = {
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "9.0.2.29"
+local addonVersion = "9.0.5.29"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Babel",
 	["Version"] = addonVersion,
-	["Date"] = "2020-11-18",
+	["Date"] = "2021-03-12",
 	["Author"] = "Peter Jack",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
-	["Copyright"] = "(c)2011-2020 by Peter Jack",
+	["Copyright"] = "(c)2011-2021 by Peter Jack",
 }
 
 -- GnomTEC API revision
