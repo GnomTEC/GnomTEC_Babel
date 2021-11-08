@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Babel
--- Version: 9.1.0.29
+-- Version: 9.1.5.30
 -- Author: Peter Jack
 -- URL: http://www.gnomtec.de/
 -- **********************************************************************
@@ -37,7 +37,7 @@ GnomTEC_Babel_Options = {
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "9.1.0.29"
+local addonVersion = "9.1.5.30"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {

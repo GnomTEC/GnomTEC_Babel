@@ -1,5 +1,9 @@
 == GnomTEC Babel - Change History 
 
+=== 9.1.0.30 (2021-11-08)
+* Updated TOC for WoW patch 9.1.5
+* Changed Backdrop elements in GUI xml
+
 === 9.1.0.29 (2021-07-01)
 * Updated TOC for WoW patch 9.1.0
 
